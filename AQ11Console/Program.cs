@@ -13,7 +13,7 @@ namespace AQ11Console
             string fileName = "Data1.txt";
             DataLoader loader = new DataLoader(fileName);
             List<Example> examples = loader.loadData();
-            string groupClass = "T1";
+            string groupClass = "T2";
             Inference inference = new Inference(examples, groupClass);
             List<LogicalArgument> rule = inference.ruleInference();
             inference.printRule(rule);
