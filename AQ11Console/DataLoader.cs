@@ -49,12 +49,12 @@ namespace AQ11Console
             {
                 string[] exampleData = line.Split(',');
                 List<Attribute> initializedAttributes = new List<Attribute>();
-                for (int i = 0; i < exampleData.Length; i++)
+                for (int i = 0; i < exampleData.Length - 1; i++)
                 {
                     Attribute attribute = attributes[i].cloneValuelessAttributeWithValue(exampleData[i]);
                     initializedAttributes.Add(attribute);
                 }
-                Example example = new Example(initializedAttributes);
+                Example example = new Example(initializedAttributes, exampleData[exampleData.Length - 1]);
                 examples.Add(example);
                 line = stream.ReadLine();
             }

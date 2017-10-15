@@ -23,7 +23,7 @@ namespace AQ11Console
         {
             List<LogicalArgument> rule = new List<LogicalArgument>();
 
-            List<Example> positiveExamples = examples.FindAll(example => example.attributes[example.attributes.Count - 1].value == groupClass);
+            List<Example> positiveExamples = examples.FindAll(example => example.groupClass == groupClass);
             List<Example> negativeExamples = examples.Except(positiveExamples).ToList();
 
             List<List<List<LogicalArgument>>> firstLevelClausules = new List<List<List<LogicalArgument>>>();
@@ -62,21 +62,12 @@ namespace AQ11Console
 
         private List<LogicalArgument> applyAbsorbRule(List<List<LogicalArgument>> disjunctions)
         {
-            int maxCount = disjunctions[0].Count;
-            foreach (List<LogicalArgument> list in disjunctions)
-            {
-                if (list.Count > maxCount)
-                    maxCount = list.Count;
-            }
-
             for (int i = 0; i < disjunctions.Count; i++)
             {
-                if (disjunctions[i].Count < maxCount)
+                for (int j = 0; j < disjunctions.Count && j != i; j++)
                 {
-                    for (int j = 0; j < disjunctions.Count && j != i; j++)
-                    {
+                    if(disjunctions[i].Count < disjunctions[j].Count)
                         clausuleInference(disjunctions[i], disjunctions[j]);
-                    }
                 }
             }
             List<LogicalArgument> result = groupUpClausules(disjunctions);
@@ -102,13 +93,16 @@ namespace AQ11Console
                 }
             }
 
+            List<LogicalArgument> deletees = new List<LogicalArgument>();
             if (fullMatch)
             {
                 for (int i = 0; i < second.Count; i++)
                 {
                     if (first.Find(arg => arg.isEqual(second[i])) == null)
-                        second.RemoveAt(i);
+                        deletees.Add(second[i]);
                 }
+                foreach(LogicalArgument deletee in deletees)
+                    second.Remove(deletee);
             }
         }
 

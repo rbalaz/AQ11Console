@@ -10,9 +10,12 @@ namespace AQ11Console
     {
         public List<Attribute> attributes { get; private set; }
 
-        public Example(List<Attribute> attributes)
+        public string groupClass { get; private set; }
+
+        public Example(List<Attribute> attributes, string groupClass)
         {
             this.attributes = attributes;
+            this.groupClass = groupClass;
         }
     }
 }
