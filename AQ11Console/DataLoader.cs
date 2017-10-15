@@ -52,9 +52,9 @@ namespace AQ11Console
                 for (int i = 0; i < exampleData.Length; i++)
                 {
                     Attribute attribute = attributes[i].cloneValuelessAttributeWithValue(exampleData[i]);
-                    attributes.Add(attribute);
+                    initializedAttributes.Add(attribute);
                 }
-                Example example = new Example(attributes);
+                Example example = new Example(initializedAttributes);
                 examples.Add(example);
                 line = stream.ReadLine();
             }

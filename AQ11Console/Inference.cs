@@ -34,8 +34,8 @@ namespace AQ11Console
                 if (skipList.Exists(num => num == i))
                     continue;
                 Example pos = positiveExamples[i];
-                firstLevelClausules[i] = new List<List<LogicalArgument>>();
-                for(int j = 0; j < negativeExamples.Count; j++)
+                firstLevelClausules.Add(new List<List<LogicalArgument>>());
+                for (int j = 0; j < negativeExamples.Count; j++)
                 {
                     Example neg = negativeExamples[j];
                     List<LogicalArgument> ineqs = new List<LogicalArgument>();
@@ -49,7 +49,7 @@ namespace AQ11Console
                             ineqs.Add(ineq);
                         }
                     }
-                    firstLevelClausules[i][j] = ineqs;
+                    firstLevelClausules[i].Add(ineqs);
                 }
                 secondLevelClausules.Add(applyAbsorbRule(firstLevelClausules[i]));
                 skipList.AddRange(skipCoveredExamples(secondLevelClausules[i], positiveExamples, i));
@@ -62,7 +62,13 @@ namespace AQ11Console
 
         private List<LogicalArgument> applyAbsorbRule(List<List<LogicalArgument>> disjunctions)
         {
-            int maxCount = disjunctions.Max(disj => disj.Count);
+            int maxCount = disjunctions[0].Count;
+            foreach (List<LogicalArgument> list in disjunctions)
+            {
+                if (list.Count > maxCount)
+                    maxCount = list.Count;
+            }
+
             for (int i = 0; i < disjunctions.Count; i++)
             {
                 if (disjunctions[i].Count < maxCount)

@@ -17,6 +17,7 @@ namespace AQ11Console
             Inference inference = new Inference(examples, groupClass);
             List<LogicalArgument> rule = inference.ruleInference();
             inference.printRule(rule);
+            Console.ReadKey();
         }
     }
 }
