@@ -49,13 +49,13 @@ namespace AQ11Console
                             ineqs.Add(ineq);
                         }
                     }
-                    firstLevelClausules[i].Add(ineqs);
+                    firstLevelClausules[firstLevelClausules.Count - 1].Add(ineqs);
                 }
-                secondLevelClausules.Add(applyAbsorbRule(firstLevelClausules[i]));
-                skipList.AddRange(skipCoveredExamples(secondLevelClausules[i], positiveExamples, i));
+                secondLevelClausules.Add(applyAbsorbRule(firstLevelClausules[firstLevelClausules.Count - 1]));
+                skipList.AddRange(skipCoveredExamples(secondLevelClausules[secondLevelClausules.Count - 1], positiveExamples, i));
             }
 
-            rule = applyAbsorbRule(secondLevelClausules);
+            rule = groupUpClausules(secondLevelClausules);
 
             return rule;
         }
@@ -64,9 +64,11 @@ namespace AQ11Console
         {
             for (int i = 0; i < disjunctions.Count; i++)
             {
-                for (int j = 0; j < disjunctions.Count && j != i; j++)
+                for (int j = 0; j < disjunctions.Count; j++)
                 {
-                    if(disjunctions[i].Count < disjunctions[j].Count)
+                    if (i == j)
+                        continue;
+                    if (disjunctions[i].Count < disjunctions[j].Count)
                         clausuleInference(disjunctions[i], disjunctions[j]);
                 }
             }
@@ -149,14 +151,15 @@ namespace AQ11Console
                     {
                         Variable var = (Variable)ineq.firstArgument;
                         Constant cons = (Constant)ineq.secondArgument;
-                        bool mapFound = true;
+                        bool mapFound = false;
                         foreach (AttributeValueMap map in resultMap)
                         {
                             if (map.name == var.name)
                                 if (map.values.Exists(val => val == cons.value) == false)
+                                {
+                                    mapFound = true;
                                     map.values.Add(cons.value);
-                                else
-                                    mapFound = false;
+                                }
                         }
                         if (!(mapFound))
                         {
@@ -182,7 +185,10 @@ namespace AQ11Console
                         foreach (string value in candidate.values)
                         {
                             if (map.values.Exists(val => val == value) == false)
+                            {
                                 missingValue = value;
+                                break;
+                            }
                         }
                         Constant cons = new Constant(missingValue);
                         Equality eq = new Equality(var, cons);
@@ -271,7 +277,7 @@ namespace AQ11Console
             string ruleString = "IF ";
             foreach (LogicalArgument arg in rule)
             {
-                ruleString = string.Concat(ruleString, arg.toString() + " ");
+                ruleString = string.Concat(ruleString, arg.toString() + " & ");
             }
             ruleString = string.Concat(ruleString, "THEN " + groupClass);
 
