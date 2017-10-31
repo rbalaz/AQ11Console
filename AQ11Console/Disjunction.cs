@@ -8,18 +8,26 @@ namespace AQ11Console
 {
     public class Disjunction : LogicalArgument
     {
-        public LogicalArgument firstArgument { get; private set; }
-        public LogicalArgument secondArgument { get; private set; }
+        public List<LogicalArgument> arguments { get; private set; }
 
-        public Disjunction(LogicalArgument firstArgument, LogicalArgument secondArgument)
+        public Disjunction(List<LogicalArgument> arguments)
         {
-            this.firstArgument = firstArgument;
-            this.secondArgument = secondArgument;
+            this.arguments = arguments;
         }
 
         public string toString()
         {
-            return "(" + firstArgument.toString() + "v" + secondArgument.toString() + ")";
+            string output = "(";
+            for (int i = 0; i < arguments.Count; i++)
+            {
+                if (i < arguments.Count - 1)
+                    output = string.Concat(output, arguments[i].toString() + " v ");
+                else
+                    output = string.Concat(output, arguments[i].toString());                     
+            }
+            output = string.Concat(output, ")");
+
+            return output;
         }
 
         public bool isEqual(LogicalArgument argument)
@@ -31,12 +39,14 @@ namespace AQ11Console
             else
             {
                 Disjunction castArgument = (Disjunction)argument;
-                if (firstArgument.isEqual(castArgument.firstArgument) == false)
+                if (arguments.Count != castArgument.arguments.Count)
                     return false;
-                else if (secondArgument.isEqual(castArgument.secondArgument) == false)
-                    return false;
-                else
-                    return true;
+                for (int i = 0; i < arguments.Count; i++)
+                {
+                    if (arguments[i].isEqual(castArgument.arguments[i]) == false)
+                        return false; 
+                }
+                return true;
             }
         }
     }

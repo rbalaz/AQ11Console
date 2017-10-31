@@ -6,20 +6,28 @@ using System.Threading.Tasks;
 
 namespace AQ11Console
 {
-    class Conjunction : LogicalArgument
+    public class Conjunction : LogicalArgument
     {
-        public LogicalArgument firstArgument { get; private set; }
-        public LogicalArgument secondArgument { get; private set; }
+        public List<LogicalArgument> arguments { get; private set; }
 
-        public Conjunction(LogicalArgument firstArgument, LogicalArgument secondArgument)
+        public Conjunction(List<LogicalArgument> arguments)
         {
-            this.firstArgument = firstArgument;
-            this.secondArgument = secondArgument;
+            this.arguments = arguments;
         }
 
         public string toString()
         {
-            return "(" + firstArgument.toString() + "&" + secondArgument.toString() + ")";
+            string output = "(";
+            for (int i = 0; i < arguments.Count; i++)
+            {
+                if (i < arguments.Count - 1)
+                    output = string.Concat(output, arguments[i].toString() + " & ");
+                else
+                    output = string.Concat(output, arguments[i].toString());
+            }
+            output = string.Concat(output, ")");
+
+            return output;
         }
 
         public bool isEqual(LogicalArgument argument)
@@ -31,12 +39,14 @@ namespace AQ11Console
             else
             {
                 Conjunction castArgument = (Conjunction)argument;
-                if (firstArgument.isEqual(castArgument.firstArgument) == false)
+                if (arguments.Count != castArgument.arguments.Count)
                     return false;
-                else if (secondArgument.isEqual(castArgument.secondArgument) == false)
-                    return false;
-                else
-                    return true;
+                for (int i = 0; i < arguments.Count; i++)
+                {
+                    if (arguments[i].isEqual(castArgument.arguments[i]) == false)
+                        return false;
+                }
+                return true;
             }
         }
     }

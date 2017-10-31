@@ -15,8 +15,8 @@ namespace AQ11Console
             List<Example> examples = loader.loadData();
             string groupClass = "T2";
             Inference inference = new Inference(examples, groupClass);
-            List<LogicalArgument> rule = inference.ruleInference();
-            inference.printRule(rule);
+            Rule rule = inference.ruleInference();
+            rule.printRule();
             Console.ReadKey();
         }
     }

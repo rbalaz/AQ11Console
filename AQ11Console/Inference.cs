@@ -19,22 +19,20 @@ namespace AQ11Console
             this.groupClass = groupClass;
         }
 
-        public List<LogicalArgument> ruleInference()
+        public Rule ruleInference()
         {
-            List<LogicalArgument> rule = new List<LogicalArgument>();
-
             List<Example> positiveExamples = examples.FindAll(example => example.groupClass == groupClass);
             List<Example> negativeExamples = examples.Except(positiveExamples).ToList();
 
-            List<List<List<LogicalArgument>>> firstLevelClausules = new List<List<List<LogicalArgument>>>();
-            List<List<LogicalArgument>> secondLevelClausules = new List<List<LogicalArgument>>();
+            List<List<Disjunction>> firstLevelClausules = new List<List<Disjunction>>();
+            List<Conjunction> secondLevelClausules = new List<Conjunction>();
             List<int> skipList = new List<int>();
             for (int i = 0; i < positiveExamples.Count; i++)
             {
                 if (skipList.Exists(num => num == i))
                     continue;
                 Example pos = positiveExamples[i];
-                firstLevelClausules.Add(new List<List<LogicalArgument>>());
+                firstLevelClausules.Add(new List<Disjunction>());
                 for (int j = 0; j < negativeExamples.Count; j++)
                 {
                     Example neg = negativeExamples[j];
@@ -49,18 +47,19 @@ namespace AQ11Console
                             ineqs.Add(ineq);
                         }
                     }
-                    firstLevelClausules[firstLevelClausules.Count - 1].Add(ineqs);
+                    Disjunction disj = new Disjunction(ineqs);
+                    firstLevelClausules[firstLevelClausules.Count - 1].Add(disj);
                 }
                 secondLevelClausules.Add(applyAbsorbRule(firstLevelClausules[firstLevelClausules.Count - 1]));
                 skipList.AddRange(skipCoveredExamples(secondLevelClausules[secondLevelClausules.Count - 1], positiveExamples, i));
             }
 
-            rule = groupUpClausules(secondLevelClausules);
+            Rule rule = new Rule(secondLevelClausules, groupClass);
 
             return rule;
         }
 
-        private List<LogicalArgument> applyAbsorbRule(List<List<LogicalArgument>> disjunctions)
+        private Conjunction applyAbsorbRule(List<Disjunction> disjunctions)
         {
             for (int i = 0; i < disjunctions.Count; i++)
             {
@@ -68,13 +67,14 @@ namespace AQ11Console
                 {
                     if (i == j)
                         continue;
-                    if (disjunctions[i].Count < disjunctions[j].Count)
-                        clausuleInference(disjunctions[i], disjunctions[j]);
+                    if (disjunctions[i].arguments.Count < disjunctions[j].arguments.Count)
+                        clausuleInference(disjunctions[i].arguments, disjunctions[j].arguments);
                 }
             }
-            List<LogicalArgument> result = groupUpClausules(disjunctions);
+            List<LogicalArgument> result = groupUpClausules(disjunctions).arguments;
             result = equalitiesInference(result);
-            return result;
+            Conjunction conj = new Conjunction(result);
+            return conj;
         }
 
         private void clausuleInference(List<LogicalArgument> first, List<LogicalArgument> second)
@@ -108,20 +108,40 @@ namespace AQ11Console
             }
         }
 
-        private List<LogicalArgument> groupUpClausules(List<List<LogicalArgument>> disjunctions)
+        private Disjunction groupUpClausules(List<Disjunction> disjunctions)
         {
             List<LogicalArgument> result = new List<LogicalArgument>();
-            result.AddRange(disjunctions[0]);
-            foreach (List<LogicalArgument> disj in disjunctions)
+            result.AddRange(disjunctions[0].arguments);
+            foreach (Disjunction disj in disjunctions)
             {
-                foreach (LogicalArgument arg in disj)
+                foreach (LogicalArgument arg in disj.arguments)
                 {
                     if (result.Exists(a => a.isEqual(arg)) == false)
                         result.Add(arg);
                 }
             }
 
-            return result;
+            Disjunction disjResult = new Disjunction(result);
+
+            return disjResult;
+        }
+
+        private Conjunction groupUpClausules(List<Conjunction> conjunctions)
+        {
+            List<LogicalArgument> result = new List<LogicalArgument>();
+            result.AddRange(conjunctions[0].arguments);
+            foreach (Conjunction conj in conjunctions)
+            {
+                foreach (LogicalArgument arg in conj.arguments)
+                {
+                    if (result.Exists(a => a.isEqual(arg)) == false)
+                        result.Add(arg);
+                }
+            }
+
+            Conjunction conjResult = new Conjunction(result);
+
+            return conjResult;
         }
 
         private List<LogicalArgument> equalitiesInference(List<LogicalArgument> result)
@@ -209,13 +229,13 @@ namespace AQ11Console
             return output;
         }
 
-        private List<int> skipCoveredExamples(List<LogicalArgument> clausules, List<Example> positiveExamples, int currentPosition)
+        private List<int> skipCoveredExamples(Conjunction clausules, List<Example> positiveExamples, int currentPosition)
         {
             List<Equality> eqs = new List<Equality>();
             List<Inequality> ineqs = new List<Inequality>();
             List<int> skipList = new List<int>();
 
-            foreach (LogicalArgument clausule in clausules)
+            foreach (LogicalArgument clausule in clausules.arguments)
             {
                 if (clausule.GetType().Name == "Inequality")
                     ineqs.Add((Inequality)clausule);
@@ -270,18 +290,6 @@ namespace AQ11Console
             }
 
             return skipList;
-        }
-
-        public void printRule(List<LogicalArgument> rule)
-        {
-            string ruleString = "IF ";
-            foreach (LogicalArgument arg in rule)
-            {
-                ruleString = string.Concat(ruleString, arg.toString() + " & ");
-            }
-            ruleString = string.Concat(ruleString, "THEN " + groupClass);
-
-            Console.WriteLine(ruleString);
         }
     }
 }
