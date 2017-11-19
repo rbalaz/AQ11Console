@@ -17,5 +17,15 @@ namespace AQ11Console
             this.attributes = attributes;
             this.groupClass = groupClass;
         }
+
+        public void printExample()
+        {
+            string toPrint = "Example: ";
+            foreach (Attribute atr in attributes)
+                toPrint += "| " + atr.name + " = " + atr.value + " ";
+            toPrint += "| Class = " + groupClass;
+
+            Console.WriteLine(toPrint);
+        }
     }
 }

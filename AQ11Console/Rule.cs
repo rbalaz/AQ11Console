@@ -17,14 +17,14 @@ namespace AQ11Console
             this.groupClass = groupClass;
         } 
 
-        public void printRule()
+        public string printRule()
         {
             string ruleString = "IF ";
             for (int i = 0; i < conjuncts.Count; i++)
             {
                 ruleString = string.Concat(ruleString, "(" + conjuncts[i].toString());
                 if (i < conjuncts.Count - 1)
-                    ruleString = string.Concat(ruleString, ") || ");
+                    ruleString = string.Concat(ruleString, ") OR ");
                 else
                     ruleString = string.Concat(ruleString, ") ");
             }
@@ -32,7 +32,54 @@ namespace AQ11Console
 
             ruleString = removeUselessBrackets(ruleString);
 
-            Console.WriteLine(ruleString);
+            return ruleString;
+        }
+
+        public bool classifyNewExample(Example example)
+        {
+            bool matchValidated = true;
+            foreach (Conjunction conj in conjuncts)
+            {
+                List<Disjunction> disjuncts = new List<Disjunction>();
+                List<LogicalArgument> eqs = new List<LogicalArgument>();
+                foreach (LogicalArgument arg in conj.arguments)
+                {
+                    if (arg.GetType().Name == "Disjunction")
+                        disjuncts.Add((Disjunction)arg);
+                    else
+                        eqs.Add(arg);
+                }
+                foreach (Disjunction disj in disjuncts)
+                {
+                    eqs.AddRange(disj.arguments);
+                }
+                foreach (LogicalArgument eq in eqs)
+                {
+                    if (eq.GetType().Name == "Equality")
+                    {
+                        Equality equality = (Equality)eq;
+                        Variable var = (Variable)equality.firstArgument;
+                        Constant cons = (Constant)equality.secondArgument;
+                        Attribute attribute = example.attributes.Find(atr => atr.name == var.name);
+                        if (attribute.value != cons.value)
+                            matchValidated = false;
+                            
+                    }
+                    else if (eq.GetType().Name == "Inequality")
+                    {
+                        Inequality inequality = (Inequality)eq;
+                        Variable var = (Variable)inequality.firstArgument;
+                        Constant cons = (Constant)inequality.secondArgument;
+                        Attribute attribute = example.attributes.Find(atr => atr.name == var.name);
+                        if (attribute.value == cons.value)
+                            matchValidated = false;
+                    }
+                }
+                if (matchValidated)
+                    return matchValidated;
+            }
+
+            return matchValidated;
         }
 
         public class BracketPair

@@ -21,7 +21,7 @@ namespace AQ11Console
             for (int i = 0; i < arguments.Count; i++)
             {
                 if (i < arguments.Count - 1)
-                    output = string.Concat(output, arguments[i].toString() + " v ");
+                    output = string.Concat(output, arguments[i].toString() + " OR ");
                 else
                     output = string.Concat(output, arguments[i].toString());                     
             }

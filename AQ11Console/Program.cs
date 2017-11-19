@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AQ11Console
 {
@@ -10,14 +11,10 @@ namespace AQ11Console
     {
         static void Main(string[] args)
         {
-            string fileName = "Data1.txt";
-            DataLoader loader = new DataLoader(fileName);
-            List<Example> examples = loader.loadData();
-            string groupClass = "T2";
-            Inference inference = new Inference(examples, groupClass);
-            Rule rule = inference.ruleInference();
-            rule.printRule();
-            Console.ReadKey();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            MainForm mainForm = new MainForm();
+            Application.Run(mainForm);
         }
     }
 }

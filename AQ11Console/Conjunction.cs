@@ -21,7 +21,7 @@ namespace AQ11Console
             for (int i = 0; i < arguments.Count; i++)
             {
                 if (i < arguments.Count - 1)
-                    output = string.Concat(output, arguments[i].toString() + " & ");
+                    output = string.Concat(output, arguments[i].toString() + " AND ");
                 else
                     output = string.Concat(output, arguments[i].toString());
             }
