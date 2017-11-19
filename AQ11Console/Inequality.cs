@@ -19,7 +19,7 @@ namespace AQ11Console
 
         public string toString()
         {
-            return "(" + firstArgument.toString() + "<>" + secondArgument.toString() + ")";
+            return "(" + firstArgument.toString() + " ≠ " + secondArgument.toString() + ")";
         }
 
         public bool isEqual(LogicalArgument argument)

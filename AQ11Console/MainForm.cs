@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AQ11Console
@@ -57,7 +52,7 @@ namespace AQ11Console
 
         private void learnButton_Click(object sender, EventArgs e)
         {
-            string groupClass = classLabel.Text;
+            string groupClass = classBox.Text;
             if (groupClass == "")
             {
                 MessageBox.Show("Class for learning was not set.", "Class error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -75,6 +70,8 @@ namespace AQ11Console
             examples = null;
             dataView.DataSource = null;
             dataView.Invalidate();
+            classBox.Text = "";
+            ruleLabel.Text = "Rule: ";
         }
 
         private void quitButton_Click(object sender, EventArgs e)

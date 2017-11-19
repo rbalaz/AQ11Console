@@ -36,7 +36,7 @@
             this.ruleLabel = new System.Windows.Forms.Label();
             this.resetButton = new System.Windows.Forms.Button();
             this.quitButton = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.classBox = new System.Windows.Forms.TextBox();
             this.classLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataView)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -119,12 +119,12 @@
             this.quitButton.UseVisualStyleBackColor = true;
             this.quitButton.Click += new System.EventHandler(this.quitButton_Click);
             // 
-            // textBox1
+            // classBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(549, 234);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(54, 20);
-            this.textBox1.TabIndex = 4;
+            this.classBox.Location = new System.Drawing.Point(549, 234);
+            this.classBox.Name = "classBox";
+            this.classBox.Size = new System.Drawing.Size(54, 20);
+            this.classBox.TabIndex = 4;
             // 
             // classLabel
             // 
@@ -142,7 +142,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(639, 469);
             this.Controls.Add(this.classLabel);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.classBox);
             this.Controls.Add(this.ruleLabel);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.dataView);
@@ -165,7 +165,7 @@
         private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.Button quitButton;
         private System.Windows.Forms.Label ruleLabel;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox classBox;
         private System.Windows.Forms.Label classLabel;
     }
 }

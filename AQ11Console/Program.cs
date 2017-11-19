@@ -9,6 +9,7 @@ namespace AQ11Console
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             Application.EnableVisualStyles();
