@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AQ11Console
+﻿namespace AQ11Console
 {
     public class Variable : LogicalArgument
     {
+        // Represents a variable in a logical formula with a given name
         public string name { get; private set; }
 
         public Variable(string name)
@@ -22,6 +17,8 @@ namespace AQ11Console
 
         public bool isEqual(LogicalArgument argument)
         {
+            // Tests if the parameter argument is of the same type 
+            // and has the same name
             if (argument.GetType() != GetType())
             {
                 return false;

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AQ11Console
 {
@@ -19,6 +16,8 @@ namespace AQ11Console
 
         public string printRule()
         {
+            // Builds the final E1/E2 wrapper from conjuncts loaded in the constructor
+            // Returns the wrapper in a single rule form
             string ruleString = "IF ";
             for (int i = 0; i < conjuncts.Count; i++)
             {
@@ -37,6 +36,8 @@ namespace AQ11Console
 
         public string[] printRules()
         {
+            // Builds the final E1/E2 wrapper from conjuncts loaded in the constructor
+            // Returns each rule disjunct separately
             string[] ruleStrings = new string[conjuncts.Count];
             for (int i = 0; i < conjuncts.Count; i++)
             {
@@ -51,6 +52,7 @@ namespace AQ11Console
 
         public bool classifyNewExample(Example example)
         {
+            // Tests, if new example matches the rule definition
             bool matchValidated = true;
             foreach (Conjunction conj in conjuncts)
             {
@@ -69,6 +71,8 @@ namespace AQ11Console
                 }
                 foreach (LogicalArgument eq in eqs)
                 {
+                    // All values in the equality must be matched 
+                    // Always a full match is required, otherwise the test fails
                     if (eq.GetType().Name == "Equality")
                     {
                         Equality equality = (Equality)eq;
@@ -79,6 +83,8 @@ namespace AQ11Console
                             matchValidated = false;
                             
                     }
+                    // None of the values in the inequality can be matched
+                    // Always a full match is required, otherwise the test fails
                     else if (eq.GetType().Name == "Inequality")
                     {
                         Inequality inequality = (Inequality)eq;
@@ -89,6 +95,7 @@ namespace AQ11Console
                             matchValidated = false;
                     }
                 }
+                // Returns the result of the test
                 if (matchValidated)
                     return matchValidated;
             }
@@ -117,6 +124,8 @@ namespace AQ11Console
 
         private string removeUselessBrackets(string rule)
         {
+            // Checks the rule string for abundant brackets by inferencing bracket pairs positions
+            // Abundant brackets are removed from the rule string before it is displayed in the GUI
             List<BracketPair> openedBrackets = new List<BracketPair>();
             List<BracketPair> closedBrackets = new List<BracketPair>();
             for (int i = 0; i < rule.Length; i++)

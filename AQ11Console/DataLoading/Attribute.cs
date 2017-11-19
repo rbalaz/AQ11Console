@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace AQ11Console
 {
     public class Attribute
     {
+        // Represents the attribute object, which contains name, value and type
         public AttributeType type { get; private set; }
         public string value { get; set; }
         public string name { get; private set; }

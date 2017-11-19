@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace AQ11Console
 {
     public class DataLoader
     {
+        // Represents a loader object responsible for loading training set from a given file
+        
+        // Exception thrown when file was not found
         class FileNotFoundException : Exception { };
-
+        // Exception thrown when file format is not supported by the loader
         class InvalidDataFileException : Exception { };
 
         private string fileName;
@@ -22,6 +22,11 @@ namespace AQ11Console
 
         public List<Example> loadData()
         {
+            // Loader supports .csv file with this metadata:
+            // Attributes:
+            // Name_of_the_attribute,Nominal/Numeric
+            // Examples:
+            // attribute_value,...,class_value
             if (File.Exists(fileName) == false)
                 throw new FileNotFoundException();
 

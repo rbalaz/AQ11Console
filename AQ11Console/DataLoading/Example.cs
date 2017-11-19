@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AQ11Console
 {
     public class Example
     {
+        // Represents an example object containing data about attributes and class
         public List<Attribute> attributes { get; private set; }
 
         public string groupClass { get; private set; }

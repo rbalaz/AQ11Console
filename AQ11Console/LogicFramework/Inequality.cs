@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AQ11Console
+﻿namespace AQ11Console
 {
     public class Inequality : LogicalArgument
     {
+        // Wrapper object representing an inequality of a variable and constant
+        // First argument must be a variable
         public LogicalArgument firstArgument { get; private set; }
+        // Second argument must be a constant
         public LogicalArgument secondArgument { get; private set; }
 
         public Inequality(LogicalArgument firstArgument, LogicalArgument secondArgument)
@@ -24,6 +21,9 @@ namespace AQ11Console
 
         public bool isEqual(LogicalArgument argument)
         {
+            // Tests if every aspect of the parameter argument matches
+            // its counterpart in this object, recursively testing all the
+            // way down to variables and constants
             if (argument.GetType() != GetType())
             {
                 return false;
