@@ -38,6 +38,7 @@
             this.quitButton = new System.Windows.Forms.Button();
             this.classBox = new System.Windows.Forms.TextBox();
             this.classLabel = new System.Windows.Forms.Label();
+            this.ruleText = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataView)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -45,6 +46,7 @@
             // dataView
             // 
             this.dataView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataView.Location = new System.Drawing.Point(12, 21);
             this.dataView.Name = "dataView";
             this.dataView.Size = new System.Drawing.Size(420, 378);
@@ -136,16 +138,27 @@
             this.classLabel.TabIndex = 5;
             this.classLabel.Text = "Class:";
             // 
+            // ruleText
+            // 
+            this.ruleText.AutoSize = true;
+            this.ruleText.Font = new System.Drawing.Font("Courier New", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.ruleText.Location = new System.Drawing.Point(64, 414);
+            this.ruleText.Name = "ruleText";
+            this.ruleText.Size = new System.Drawing.Size(0, 18);
+            this.ruleText.TabIndex = 6;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(639, 469);
+            this.ClientSize = new System.Drawing.Size(639, 486);
+            this.Controls.Add(this.ruleText);
             this.Controls.Add(this.classLabel);
             this.Controls.Add(this.classBox);
             this.Controls.Add(this.ruleLabel);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.dataView);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "AQ11 demonstration application";
             ((System.ComponentModel.ISupportInitialize)(this.dataView)).EndInit();
@@ -167,5 +180,6 @@
         private System.Windows.Forms.Label ruleLabel;
         private System.Windows.Forms.TextBox classBox;
         private System.Windows.Forms.Label classLabel;
+        private System.Windows.Forms.Label ruleText;
     }
 }

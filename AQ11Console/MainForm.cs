@@ -61,7 +61,19 @@ namespace AQ11Console
             {
                 Inference inference = new Inference(examples, groupClass);
                 Rule rule = inference.ruleInference();
-                ruleLabel.Text += rule.printRule();
+                string[] rules = rule.printRules();
+                if (rules.Length == 1)
+                    ruleLabel.Text = "Rule: ";
+                else
+                    ruleLabel.Text = "Rules: ";
+                ruleText.Text = "";
+                for (int i = 0; i < rules.Length; i++)
+                {
+                    if (i < rules.Length - 1)
+                        ruleText.Text += rules[i] + "\n";
+                    else
+                        ruleText.Text += rules[i];
+                }
             }
         }
 
@@ -72,6 +84,7 @@ namespace AQ11Console
             dataView.Invalidate();
             classBox.Text = "";
             ruleLabel.Text = "Rule: ";
+            ruleText.Text = "";
         }
 
         private void quitButton_Click(object sender, EventArgs e)

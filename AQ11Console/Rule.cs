@@ -35,6 +35,20 @@ namespace AQ11Console
             return ruleString;
         }
 
+        public string[] printRules()
+        {
+            string[] ruleStrings = new string[conjuncts.Count];
+            for (int i = 0; i < conjuncts.Count; i++)
+            {
+                ruleStrings[i] = "IF ";
+                ruleStrings[i] = string.Concat(ruleStrings[i], "(" + conjuncts[i].toString() + ") ");
+                ruleStrings[i] = string.Concat(ruleStrings[i], "THEN " + groupClass);
+                ruleStrings[i] = removeUselessBrackets(ruleStrings[i]);
+            }
+
+            return ruleStrings;
+        }
+
         public bool classifyNewExample(Example example)
         {
             bool matchValidated = true;
