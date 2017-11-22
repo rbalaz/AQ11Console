@@ -101,7 +101,7 @@ namespace AQ11Console
                         clausuleInference(disjunctions[i].arguments, disjunctions[j].arguments);
                 }
             }
-            // Builds a one line logical conjunction from ei/ej wrappers fragments that were not absorbed
+            // Removes redundant clausules using the law: a AND a <=> a
             List<LogicalArgument> result = groupUpClausules(disjunctions).arguments;
             // Replaces inequalities with equalities if applicable
             result = equalitiesInference(result);

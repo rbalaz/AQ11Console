@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AQ11Console
@@ -16,6 +17,9 @@ namespace AQ11Console
 
         private void dataLoader_Click(object sender, EventArgs e)
         {
+            string path = Environment.CurrentDirectory;
+            openFileDialog1.Filter = "Text|*.txt|CSV file|*.csv|All|*.*";
+            openFileDialog1.InitialDirectory = Path.Combine(path, @"Data");
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 DataLoader loader = new DataLoader(openFileDialog1.FileName);
@@ -53,7 +57,11 @@ namespace AQ11Console
         private void learnButton_Click(object sender, EventArgs e)
         {
             string groupClass = classBox.Text;
-            if (groupClass == "")
+            if (examples == null)
+            {
+                MessageBox.Show("No data available.", "Data error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (groupClass == "")
             {
                 MessageBox.Show("Class for learning was not set.", "Class error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -62,18 +70,14 @@ namespace AQ11Console
                 Inference inference = new Inference(examples, groupClass);
                 Rule rule = inference.ruleInference();
                 string[] rules = rule.printRules();
-                if (rules.Length == 1)
-                    ruleLabel.Text = "Rule: ";
-                else
-                    ruleLabel.Text = "Rules: ";
-                ruleText.Text = "";
+                DataTable dataTable = new DataTable();
+                dataTable.Columns.Add(new DataColumn("Rule", typeof(string)));
                 for (int i = 0; i < rules.Length; i++)
                 {
-                    if (i < rules.Length - 1)
-                        ruleText.Text += rules[i] + "\n";
-                    else
-                        ruleText.Text += rules[i];
+                    dataTable.Rows.Add(rules[i]);
                 }
+                ruleView.DataSource = dataTable;
+                ruleView.Columns[0].Width = 900;
             }
         }
 
@@ -83,8 +87,8 @@ namespace AQ11Console
             dataView.DataSource = null;
             dataView.Invalidate();
             classBox.Text = "";
-            ruleLabel.Text = "Rule: ";
-            ruleText.Text = "";
+            ruleView.DataSource = null;
+            ruleView.Invalidate();
         }
 
         private void quitButton_Click(object sender, EventArgs e)

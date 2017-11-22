@@ -24,7 +24,7 @@ namespace AQ11Console
         {
             // Loader supports .csv file with this metadata:
             // Attributes:
-            // Name_of_the_attribute,Nominal/Numeric
+            // Name_of_the_attribute,type_of_the_attribute
             // Examples:
             // attribute_value,...,class_value
             if (File.Exists(fileName) == false)
