@@ -17,14 +17,21 @@ namespace AQ11Console
 
         private void dataLoader_Click(object sender, EventArgs e)
         {
-            string path = Environment.CurrentDirectory;
-            openFileDialog1.Filter = "Text|*.txt|CSV file|*.csv|All|*.*";
-            openFileDialog1.InitialDirectory = Path.Combine(path, @"Data");
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (examples != null)
             {
-                DataLoader loader = new DataLoader(openFileDialog1.FileName);
-                examples = loader.loadData();
-                loadExamplesIntoDataGrid();
+                MessageBox.Show("Reset dataset results before loading another dataset.", "Loading error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                string path = Environment.CurrentDirectory;
+                openFileDialog1.Filter = "Text|*.txt|CSV file|*.csv|All|*.*";
+                openFileDialog1.InitialDirectory = Path.Combine(path, @"Data");
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    DataLoader loader = new DataLoader(openFileDialog1.FileName);
+                    examples = loader.loadData();
+                    loadExamplesIntoDataGrid();
+                }
             }
         }
 
