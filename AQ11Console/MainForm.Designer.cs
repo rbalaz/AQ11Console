@@ -141,6 +141,7 @@
             // 
             this.ruleView.BackgroundColor = System.Drawing.Color.LightSteelBlue;
             this.ruleView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ruleView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.ruleView.Location = new System.Drawing.Point(12, 330);
             this.ruleView.Name = "ruleView";
             this.ruleView.Size = new System.Drawing.Size(647, 139);

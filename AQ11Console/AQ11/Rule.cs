@@ -79,20 +79,8 @@ namespace AQ11Console
                         Variable var = (Variable)equality.firstArgument;
                         Constant cons = (Constant)equality.secondArgument;
                         Attribute attribute = example.attributes.Find(atr => atr.name == var.name);
-                        if (attribute.value != cons.value)
-                            matchValidated = false;
-                            
-                    }
-                    // None of the values in the inequality can be matched
-                    // Always a full match is required, otherwise the test fails
-                    else if (eq.GetType().Name == "Inequality")
-                    {
-                        Inequality inequality = (Inequality)eq;
-                        Variable var = (Variable)inequality.firstArgument;
-                        Constant cons = (Constant)inequality.secondArgument;
-                        Attribute attribute = example.attributes.Find(atr => atr.name == var.name);
-                        if (attribute.value == cons.value)
-                            matchValidated = false;
+                        if (cons.valueSet.Contains(attribute.value) == false)
+                            matchValidated = false;                           
                     }
                 }
                 // Returns the result of the test

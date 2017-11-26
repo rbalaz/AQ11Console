@@ -212,10 +212,13 @@ namespace AQ11Console
                             // If attribute map is found for the given name
                             // it adds its value if its not yet listed in the map
                             if (map.name == var.name)
-                                if (map.values.Exists(val => val == cons.value) == false)
+                                foreach (string value in cons.valueSet)
                                 {
-                                    mapFound = true;
-                                    map.values.Add(cons.value);
+                                    if (map.values.Exists(val => val == value) == false)
+                                    {
+                                        mapFound = true;
+                                        map.values.Add(value);
+                                    }
                                 }
                         }
                         // If no map is found for attribute of the given name
@@ -224,50 +227,32 @@ namespace AQ11Console
                             // New map is created using data from the full attribute map generated from training set
                             AttributeType type = maps.ToList().Find(m => m.name == var.name).type;
                             AttributeValueMap map = new AttributeValueMap(var.name, type);
-                            map.values.Add(cons.value);
+                            map.values.AddRange(cons.valueSet);
                             resultMap.Add(map);
                         }
                     }
                 }
             }
 
-            // Inequality can be changed to equality if the inequality includes all but one attribute value
+            // Inequalities are changed to equalities for better readability
             List<LogicalArgument> output = new List<LogicalArgument>();
             foreach (AttributeValueMap map in resultMap)
             {
                 AttributeValueMap candidate = maps.ToList().Find(m => m.name == map.name);
                 if (candidate != null)
                 {
-                    // If the result map has one less candidate than full map
-                    if (map.values.Count == candidate.values.Count - 1)
+                    Variable var = new Variable(map.name);
+                    List<string> missingValues = new List<string>();
+                    // Aquires all values allowed by the inequality from the attributemap
+                    foreach (string value in candidate.values)
                     {
-                        // Inequality is replaced with equality 
-                        // Equality is built using the missing value in result map, which is retrieved from the full map
-                        Variable var = new Variable(map.name);
-                        string missingValue = "";
-                        foreach (string value in candidate.values)
-                        {
-                            if (map.values.Exists(val => val == value) == false)
-                            {
-                                missingValue = value;
-                                break;
-                            }
-                        }
-                        Constant cons = new Constant(missingValue);
-                        Equality eq = new Equality(var, cons);
-                        output.Add(eq);
+                        if (map.values.Exists(val => val == value) == false)
+                            missingValues.Add(value);
                     }
-                    // If not, inequality is passed to the final result
-                    else
-                    {
-                        foreach (string value in map.values)
-                        {
-                            Variable var = new Variable(map.name);
-                            Constant cons = new Constant(value);
-                            Inequality ineq = new Inequality(var, cons);
-                            output.Add(ineq);
-                        }
-                    }
+                    // Builds equation from the missing values and adds it to the final output
+                    Constant cons = new Constant(missingValues);
+                    Equality eq = new Equality(var, cons);
+                    output.Add(eq);
                 }
             }
             return output;
@@ -276,14 +261,11 @@ namespace AQ11Console
         private List<int> skipCoveredExamples(Conjunction clausules, List<Example> positiveExamples, int currentPosition)
         {
             List<Equality> eqs = new List<Equality>();
-            List<Inequality> ineqs = new List<Inequality>();
             List<int> skipList = new List<int>();
 
             foreach (LogicalArgument clausule in clausules.arguments)
             {
-                if (clausule.GetType().Name == "Inequality")
-                    ineqs.Add((Inequality)clausule);
-                else if (clausule.GetType().Name == "Equality")
+                if (clausule.GetType().Name == "Equality")
                     eqs.Add((Equality)clausule);
                 else
                     throw new MalfunctionDetectedException();
@@ -303,27 +285,7 @@ namespace AQ11Console
                     // by attribute values of the following positive examples
                     if (count != -1)
                     {
-                        if (positiveExamples[i].attributes[count].value == cons.value)
-                        {
-                            valueChanged = true;
-                        }
-                        else
-                        {
-                            covered = false;
-                            break;
-                        }
-                    }
-                }
-                foreach (Inequality ineq in ineqs)
-                {
-                    Variable var = (Variable)ineq.firstArgument;
-                    Constant cons = (Constant)ineq.secondArgument;
-                    // Tests, if every value inside the inequalities of the ei/E2 wrapper is not matched
-                    // by attribute values of the following positive examples
-                    int count = positiveExamples[i].attributes.FindIndex(atr => atr.name == var.name);
-                    if (count != -1)
-                    {
-                        if (positiveExamples[i].attributes[count].value != cons.value)
+                        if (cons.valueSet.Contains(positiveExamples[i].attributes[count].value))
                         {
                             valueChanged = true;
                         }

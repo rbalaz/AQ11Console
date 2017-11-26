@@ -1,18 +1,36 @@
-﻿namespace AQ11Console
+﻿using System.Collections.Generic;
+
+namespace AQ11Console
 {
     public class Constant : LogicalArgument
     {
         // Represents a constant in a logical formula with a given value
-        public string value { get; private set; }
+        public List<string> valueSet { get; private set; }
+
+        public Constant(List<string> valueSet)
+        {
+            this.valueSet = valueSet;
+        }
 
         public Constant(string value)
         {
-            this.value = value;
+            valueSet = new List<string>();
+            valueSet.Add(value);
         }
 
         public string toString()
         {
-            return value;
+            if (valueSet.Count == 1)
+                return valueSet[0];
+            string buildString = "{ ";
+            for (int i = 0; i < valueSet.Count; i++)
+            {
+                buildString += valueSet[i];
+                if (i < valueSet.Count - 1)
+                    buildString += ", ";
+            }
+            buildString += " }";
+            return buildString;
         }
 
         public bool isEqual(LogicalArgument argument)
@@ -26,10 +44,12 @@
             else
             {
                 Constant castArgument = (Constant)argument;
-                if (value == castArgument.value)
-                    return true;
-                else
-                    return false;
+                foreach (string value in castArgument.valueSet)
+                {
+                    if (valueSet.Contains(value) == false)
+                        return false;
+                }
+                return true;
             }
         }
     }
