@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace AQ11Console
 {
@@ -59,6 +60,7 @@ namespace AQ11Console
             }
 
             dataView.DataSource = dataTable;
+            dataView.DefaultCellStyle.Font = new Font("Arial", 12);
         }
 
         private void learnButton_Click(object sender, EventArgs e)
@@ -85,6 +87,7 @@ namespace AQ11Console
                 }
                 ruleView.DataSource = dataTable;
                 ruleView.Columns[0].Width = 900;
+                ruleView.DefaultCellStyle.Font = new Font("Arial", 12);
             }
         }
 
